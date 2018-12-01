@@ -1,0 +1,159 @@
+begin: {  //Play Best-Of 5, Rock Paper Scissors w Comp    
+              function Game() {
+                this.round = 1;
+                this.humanMove = "";
+                this.computerMove = "";
+                this.winner = "";
+                this.score = "";
+              }
+              //Results
+              let winningMsg = "Which Weapon Won";
+              let pointTo = "Which Player Won";
+              let numScore = 0;
+              let gameWinner = "The Best Man";
+
+              //What I would do next
+              //i would deal with my input better. right now it is just based on the first character of the string. 
+              //i would playGame needs to handle 'best out of 5' - right now it just does 5 rounds.
+}
+
+
+
+
+confirm("When Ready to Play..Click OK!");
+console.log("Play Rock Paper Scissors!");
+
+var currGame = new Game(); 
+console.log("Beginning New Game \n\n");
+
+playGame(currGame);
+console.log("And the Winner is: " + annouceWinner(currGame) + "!");
+
+function playGame(Game) {
+
+  for (;Game.round<6;) {
+    console.log("\n\n~~~~~~~~~~~~~~~~~~~~\nRound " + Game.round);
+    playRound(currGame);
+    console.log("\nThe Human Played: " + this.humanMove, "\nThe Computer Played: " + this.computerMove +"\n");
+    //(currGame.winner == "DRAW")? playRound(currGame) : 
+    scoreRound(currGame);
+
+    console.log(winningMsg);
+    console.log("\nThe Point goes to: " + pointTo + "\n\n");
+    //console.log(currGame);
+    console.log("Human ||" + currGame.score.charAt(0) + "| Comp || " + currGame.score.charAt(1) +"|");
+  }
+  return "Played Game";
+}
+
+
+  
+function playRound(Game) {
+  Game.humanMove = humanPlay();
+  Game.computerMove = computerPlay();
+
+  if (Game.humanMove === Game.computerMove) {Game.winner = "DRAW";}
+  else {
+    let moves = Game.humanMove + Game.computerMove;
+    //console.log(moves);
+
+    if (currGame.humanMove | currGame.computerMove == "Rock") {
+      if (moves.includes("Paper")) {currGame.winner = "Paper";} 
+      if (moves.includes("Scissors")) {currGame.winner = "Rock";} 
+    }
+
+    if (currGame.humanMove | currGame.computerMove == "Paper") {
+      if (moves.includes("Rock")) {currGame.winner = "Paper";} 
+      if (moves.includes("Scissors")) {currGame.winner = "Scissors";} 
+    }
+
+    if (currGame.humanMove | currGame.computerMove == "Scissors") {
+      if (moves.includes("Paper")) {currGame.winner = "Paper";} 
+      if (moves.includes("Rock")) {currGame.winner = "Rock";} 
+    }
+  }
+
+
+return Game;
+}
+
+
+  function humanPlay() { //Prompt for Rock (something that starts with r), Paper (starts w p), Scissors (starts s)
+    let humanChoice = prompt("Choose: Rock Paper Scissors?");
+    let searchRock = /^r/i;
+    let searchPaper = /^p/i;
+    let searchScissors = /^s/i;
+      humanMove = searchRock.test(humanChoice) ?  "Rock" : 
+      humanMove = searchPaper.test(humanChoice) ? "Paper" :
+      humanMove = searchScissors.test(humanChoice) ? "Scissors": "Don't know what you want, man";
+    return humanMove;
+  }
+
+  function computerPlay() { //Each 1/3 of random numbers relates to Rock/Paper/Scissors
+    let randoNumber = Math.random();
+    if (randoNumber < 0.33) 
+      {computerMove = "Rock";}
+      else if (randoNumber < 0.67) {computerMove = "Paper";}
+      else {computerMove = "Scissors";}
+    return computerMove;
+  }
+
+
+
+function scoreRound(Game) {
+
+  switch (Game.winner) { //Gets Winning Element: winningMsg
+    case "DRAW":
+      winningMsg = "Try Again!";
+    case "Rock":
+      winningMsg = "Rock Beats Scissors!";
+      break;
+    case "Paper":
+      winningMsg = "Paper Beats Rock!";
+      break;
+    case "Scissors":
+      winningMsg = "Scissors Beats Paper!";
+      break;
+  }
+
+  switch (Game.winner) {  //Gets Winning Player: pointTo
+    case  "DRAW":
+    pointTo = "No One"; 
+    break;
+
+    case Game.humanMove:
+    pointTo = "Human"; 
+    Game.round++;
+    break;
+
+    case Game.computerMove:
+    pointTo = "Computer";
+    Game.round++;
+    break;
+  }
+
+  updateScoreBlock: {  //Add pts to score(str) as num: numScore
+    numScore = Number.parseInt(Game.score);
+    //console.log("The num score is: " + numScore);
+    switch(pointTo) { //Score is HvC. H pts in 10s place, C in 1s
+      case "Human": 
+      numScore += 10;
+      break;
+      case "Computer":
+      numScore += 1;
+      break;
+    }
+    //console.log("The num score is: " + numScore);
+    Game.score = String(numScore);
+    //console.log(Game.score);
+  }
+
+  return winningMsg, pointTo, Game;
+}
+
+function annouceWinner(Game) {
+  humanScore = +Game.score.charAt(0);
+  compScore = +Game.score.charAt(0);
+  gameWinner = (humanScore > compScore)? "Human" : "Computer" ;
+  return gameWinner;
+}
