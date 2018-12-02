@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	<title>Your Library</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!<link rel="stylesheet" type="text/css" href="reset.css">
+		<!<link rel="stylesheet" type="text/css" href="mobile.css">
+		<!<link rel="stylesheet" type="text/css" media="screen and (min-width: 550px)" href="large.css">
+
+
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+		</script>
+		<![endif]-->
+
+		<style>
+		body {font-family: Verdana, sans-serif; font-size:0.8em;}
+		html,body,div,header,nav,section,article,footer
+		{box-sizing: border-box; border:1px solid grey; margin: 0%; padding:1%;}
+		nav ul {margin:0; padding:0;}
+		nav ul li {display:inline; margin: 1%;}
+		footer {text-align: center;}
+		</style>
+	</head>
+	<body>
+
+	<header>
+	  	<h1>Your Library  -  <p style="display: inline;"id="libSize"></p>  -  <p style="display: inline;"id="date"></p></h1>
+	</header>
+
+	<nav>
+		<ul><li id="storageTest"></li></ul>
+		<ul>
+		  <li>
+		  	<form id="addBookForm" method="post" action="">
+		  	<table align="center">
+			  	<tr align="center">
+			  		<td>Title<br><input type="text" name="title" value="z"  required><td>
+			  		<td>Author<br><input type="text" name="author" value="a" required></td>
+			  		<td>Number of Pages<br><input type="text" name="pages" value="8" required></td>
+			  		<td>Read It?<br>
+			  			Y<input type="radio" name="haveRead" value="true">
+			  			N<input type="radio" name="haveRead" value="false"></td>
+			  		<td><button onclick="addBook()">Add Book</button></td>
+			  	</tr>
+			</table>
+		  	</li>
+		</ul>
+	</nav>
+
+	<section id="nonfiction">
+
+	</section>
+
+	<footer>
+			<p>&copy; 2018 || The Odin Project:  Javascript Basics// Project 1: A Library.</p>
+	</footer>
+
+	</body>
+
+
+
+<script>
+
+
+//0. Highlights
+var library = new Array();
+var timeUpdated;
+
+function Book (time,title,author,pages,haveRead) {
+	this.updated = time;
+	this.title = title;
+	this.author = author;
+	this.pages = pages;
+	this.haveRead = haveRead;
+	}
+
+	/* Specs & Testing */
+	//-0-Uses localStorage to manage usersLibrary
+	//-0-Adds New Books to usersLibrary
+	//-0-Displays usersLibrary in simple table
+	//-0-Counts Books, Tells Date, Reports Last Updated
+	//-X-localStorage checking before using
+	//-X-haveRead radio inputs don't register at all
+	//-X-'Remove Book' and '(Un)Read Book' buttons don't work
+	//-x-Snazy UI
+
+
+
+//1. Storage Test, if available get Library. Else: Error Out & TERMINATE!
+
+		if (isLocalStorageAvailable() != true) {
+			console.log("Please enable localStorage in order to use this App Fully.  Thanks");
+		}	else if (localStorage.length ==0) { 
+			//library = 
+		}
+
+	library = getLibrary();
+	console.log("gotLibrary"); console.log(library);
+
+//2. Get Library Size & Current Date 
+
+	//get the number of books
+	let numBooks = library.length + " Books";
+	console.log(library.length);
+	document.getElementById('libSize').innerHTML = numBooks; 
+	//get the date today
+	let dateNow = new Date().toDateString(); 
+	document.getElementById('date').innerHTML = dateNow; 
+
+
+//3. Display Library
+
+	for (let b of library) { //create Info, create Article, make node, load node
+	
+		
+		let bookText = b.title + " " + b.author + " " + b.pages + " " + b.haveRead;
+		let bookButton = "do something";
+		
+		let eachBook = document.createElement("article");
+		let bookNode = document.createTextNode(bookText);
+
+		let removeButton = document.createElement("button");
+		let readItButton = document.createElement("button");
+
+		removeButton.innerHTML = "Remove Book";
+		readItButton.innerHTML = "(Un)Read Book";
+
+		eachBook.appendChild(bookNode); 
+		eachBook.appendChild(removeButton);
+		eachBook.appendChild(readItButton);
+
+		let section = document.getElementById("nonfiction"); 
+		section.appendChild(eachBook);
+		
+	}
+
+
+//4. Done
+
+	//console.log("done");
+
+
+
+
+
+/* Get This Machines Library from localStorage, or Create one*/
+function getLibrary() { //
+	
+	var localStorageCollected = new Array ();
+
+	//Is there already a library? if not, make one
+
+	if(localStorage.length > 0) { //store all the librarys' dates
+		for (var i = 0, l = localStorage.length; i < l; i++) {
+			localStorageCollected[i] = localStorage.getItem(localStorage.key(i));
+			//console.log("getting lS");
+			//var aBook = new Book(JSON.parse(localStorage.getItem(localStorage.key(i))));
+			//console.log(localStorage.getItem(localStorage.key(i)));
+			}
+		}
+
+		//console.log("collecting the library");
+		//console.log(localStorageCollected);
+	for (let b of localStorageCollected) { //compare them to find the most epoch
+		aBook = (JSON.parse(b));
+		//console.log(JSON.parse(b));
+		library.push(aBook);
+		}
+
+	//console.log("The gotten library");
+	//console.log(library);
+
+	return library;
+
+}
+
+/*=======================================================================*/
+
+
+function addBook() {
+	let formInfo = document.getElementById("addBookForm");
+	let addThisBook = new Book();
+	console.log("hello new Book"); console.log(library);
+
+	for (let f of formInfo) {
+		addThisBook.updated = new Date().getTime();
+		switch (f.name) {
+			case "title":
+				addThisBook.title = f.value;
+				break;
+			case "author":
+				addThisBook.author = f.value;
+				break;
+			case "pages":
+				addThisBook.pages = f.value;
+				break;
+			case "haveRead":
+				addThisBook.haveRead = (f.value == 'on') ? true : false;
+				break;
+		console.log(f.name + ": " + f.value);
+		}
+	}
+
+	library.push(addThisBook);
+	console.log("hey");
+	console.log(addThisBook);
+	let addThisBookJSON = JSON.stringify(addThisBook);
+	
+	//localStorage.clear();
+	libraryString = localStorage.setItem(new Date().getTime(), addThisBookJSON);
+
+	//console.log(localStorage.getItem(0));
+	//console.log("New Library " + libraryString);
+
+}
+
+
+function isLocalStorageAvailable () { //Make Sure we have access to localStorage
+	let thing1 = "mycat", thing2 = "purrs";
+	localStorage.setItem(thing1,thing2);
+	let availability = (localStorage.getItem(thing1) == thing2) ? true : false;
+	localStorage.removeItem(thing1);
+	return availability;
+}
+
+
+</script>
+</html>
